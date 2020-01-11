@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="../assets/js/jquery-1.11.1.min.js"></script>
+
+</head>
+<body>
+
+<input type="button" onclick="test()" value="test">
+
+</body>
+
+<script type="text/javascript">
+
+    function test() {
+        $.ajax({
+            url: "../user/test",
+            type: "get",
+            data:{userName:"小明"},
+            datatype:"json",
+            success: function (data) {
+
+                alert(data);
+
+            },
+            error: function () {
+                alert("ajax访问失败了,查看控制台");
+            }
+        });
+    }
+</script>
+
+</html>
