@@ -13,4 +13,8 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
-
+  rabbitmq:
+    host: 127.0.0.1
+    password: 666
+    port: 5672
+    username: six

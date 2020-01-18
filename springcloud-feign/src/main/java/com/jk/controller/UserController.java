@@ -2,6 +2,8 @@ package com.jk.controller;
 
 import com.jk.model.UserModel;
 import com.jk.service.UserService;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("user")
@@ -49,6 +52,25 @@ public class UserController {
         request.getSession().setAttribute("user",user);
         return "登录成功！";
     }
+
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @PostMapping("testRabbitMQ")
+    public String testRabbitMQ(){
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("123","qwe");
+        amqpTemplate.convertAndSend("YuDing",map);
+        return  "成功";
+    }
+
+    @RabbitListener(queues = "YuDing")
+    public void getMessage(HashMap map){
+        System.out.println("--------getMessage---"+map);
+
+    }
+
 
 
 
