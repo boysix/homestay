@@ -10,16 +10,35 @@
 <body>
 
 <input type="button" onclick="test()" value="test">
+<input type="button" onclick="test()" value="test">
+<input type="button" onclick="test()" value="test">
+<input type="button" onclick="test()" value="test">
 
 </body>
 
 <script type="text/javascript">
 
+    function aaa() {
+        $.ajax({
+            url: "../zqx/query",
+            type: "post",
+            data:$("#oneForm").serialize(),
+            datatype:"json",
+            success: function (data) {
+
+
+            },
+            error: function () {
+                alert("ajax访问失败了,查看控制台");
+            }
+        });
+    }
+
     function test() {
         $.ajax({
-            url: "../user/test",
-            type: "get",
-            data:{userName:"小明"},
+            url: "../user/testRabbitMQ",
+            type: "post",
+            //data:{userName:"小明"},
             datatype:"json",
             success: function (data) {
 
