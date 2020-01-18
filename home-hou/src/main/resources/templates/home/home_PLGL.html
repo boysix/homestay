@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子空间</title>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap3/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap3/css/bootstrap.css"/>
+
+    <script src="../js/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-treeview/bootstrap-treeview.min.css"/>
+
+    <script src="../js/bootStrap-addTabs/bootstrap.addtabs.js"></script>
+    <link rel="stylesheet" href="../js/bootStrap-addTabs/bootstrap.addtabs.css"/>
+
+    <script src="../js/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-table/bootstrap-table.css"/>
+
+    <!-- 引入弹框的js -->
+    <script src="../js/bootstrap-bootbox/bootbox.js"></script>
+    <!-- bootstrap-dialog  -->
+    <script src="../js/bootstrap-dialog/dist/js/bootstrap-dialog.js"></script>
+    <link href="../js/bootstrap-dialog/dist/css/bootstrap-dialog.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+
+                <div class="col-md-12 column">
+
+                    <div class="page-header " style="color: #00bbee">
+                        <h3>我的帖子</h3>
+                    </div>
+
+                    <!--搜索框-->
+
+                    <!--搜索-->
+                    <div class="" style="text-align: center">
+                        <form class="navbar-form navbar-left">
+
+                            <div class="form-group" style="width: 700px">
+                                <input type="text" id="postsTitleId" size="90px" class="form-control" placeholder="快速搜索">
+                            </div>
+                            <button type="button" onclick="searchUser()" class="btn btn-primary glyphicon glyphicon-search">  搜索</button>
+                        </form>
+                    </div>
+                    <!--搜索结束-->
+
+                    <div class="row">
+
+                        <div class="col-md-7" style="margin-left: 40px">
+                            <div style="width: 600px">
+                                <div id="toolbar">
+                                    <button onclick="deleteall()" type="button" class="btn btn-danger">批量删除</button>
+                                </div>
+                                <table id="tieziTableId"></table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" style="margin-top: 55px;background-color: red">
+                            <!--右-->
+                            1234213
+                        </div>
+                        <div class="col-md-4" style="background-color: green">
+                            <!--右-->
+                            1234213
+                        </div>
+                        <div class="col-md-4" style="margin-top: 20px;background-color: red">
+                            <!--右-->
+                            1234213
+                        </div>
+                        <div class="col-md-4" style="background-color: green">
+                            <!--右-->
+                            1234213
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+        </div>
+    </div>
+</div>
+</body>
+<SCRIPT>
+
+
+    $(function () {
+
+        initwdtz();
+    })
+
+    //条查
+    function searchUser(){
+        $("#tieziTableId").bootstrapTable('refresh',{
+            query:{
+                page:1
+            }
+        })
+    }
+
+    /*删除帖子*/
+    deleteTieZi = function(ids){
+
+        $.ajax({
+            url:"../wl/deleteTieZi",
+            data:{"ids":ids},
+            success:function (data) {
+
+                alert(data)
+                searchUser();
+            }
+        })
+
+    }
+
+
+    /*批删帖子*/
+    deleteall = function(){
+
+        var arr = $("#tieziTableId").bootstrapTable('getSelections');
+
+        if(arr.length<=0){
+            bootbox.alert({
+                size: "small",
+                title: "提示",
+                message: "请至少选中一条数据！",
+                buttons: {
+                    ok: {
+                        label: '确定',
+                        className: 'btn-success'
+                    }
+                },
+                callback: function(){}
+            })
+        }else{
+            bootbox.confirm({
+                size: "small",
+                title: "提示",
+                message: "是否确认取消收藏？",
+                buttons: {
+                    confirm: {
+                        label: '确定',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function(result){
+                    if(result){
+                        var ids = "";
+                        for (var i = 0; i < arr.length; i++) {
+                            ids += ids == '' ? arr[i].postsId : ","+arr[i].postsId;
+                        }
+
+                        deleteTieZi(ids);
+                    }
+                }
+            })
+        }
+
+    }
+
+    /*帖子表格数据*/
+    initwdtz = function () {
+
+        $("#tieziTableId").bootstrapTable({
+            toolbar:'#toolbar',
+            url:"../wl/queryTieZi",
+            method:"post",
+            contentType:'application/x-www-form-urlencoded',//post请求按照表单方式
+            pagination:true, //是否展示分页
+            sidePagination:'server',//分页方式：client客户端分页，server服务端分页
+            pageList:[2, 4, 6, 8],//分页组件
+            pageNumber:1,
+
+            pageSize:6,//默认每页条数
+            clickToSelect: true, //是否启用点击选  中行
+            queryParams:function(){
+                var postsTitletext = $("#postsTitleId").val();
+                return{
+                    page:this.pageNumber,
+                    rows:this.pageSize,
+                    postsTitle:postsTitletext,
+                }
+            },
+            columns:[
+
+                {field: 'checkbox', checkbox: true},  //开启复选框
+                /* {field: 'postsId',title: '标题',width:200}, */
+                {field: 'postsTitle', title: '标题',
+                    formatter:function (value,row,index) {
+
+                    var  a = "<a href='javascript:tiezititle(\""+row.postsId+"\")'>"+value+"</a>";
+
+                        return a;
+                    },width: 300},
+                {field: 'postsContent', title: '内容',
+                    formatter:function (value,row,index) {
+                        var a = "";
+
+                        a =value.substr(1,10);
+                        a+="......";
+
+                        var b = "<a href='javascript:info(\""+row.postsContent+"\")'>"+a+"</a>"
+                        return b;
+                    },width: 300},
+
+                {field: 'postsTime',title: '发布日期',
+                    formatter: function (value,row,index){
+
+                        var a = value.substr(0,10);
+
+                        return a;
+                    }, width:200},
+                {field: 'XXX', title: '操作', width: 300,
+                    formatter: function (value,row,index){
+                        var content = "<a href='javascript:deleteTieZi(\""+row.postsId+"\")'>删除</a>"
+                        return content;
+                    }
+                }
+            ]
+        })
+    }
+
+    // 帖子回显
+    tiezititle = function(id){
+       location.href = "../lyy/showcha?id="+id;
+    }
+    // 内容详情
+    info = function (info) {
+        alert(info)
+    }
+
+
+
+</SCRIPT>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap3/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap3/css/bootstrap.css"/>
+
+    <script src="../js/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-treeview/bootstrap-treeview.min.css"/>
+
+    <script src="../js/bootStrap-addTabs/bootstrap.addtabs.js"></script>
+    <link rel="stylesheet" href="../js/bootStrap-addTabs/bootstrap.addtabs.css"/>
+
+    <script src="../js/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-table/bootstrap-table.css"/>
+
+    <!-- 引入弹框的js -->
+    <script src="../js/bootstrap-bootbox/bootbox.js"></script>
+    <!-- bootstrap-dialog  -->
+    <script src="../js/bootstrap-dialog/dist/js/bootstrap-dialog.js"></script>
+    <link href="../js/bootstrap-dialog/dist/css/bootstrap-dialog.css" rel="stylesheet"/>
+
+    <!--富文本-->
+    <link rel="stylesheet" href="../../kindeditor-4.1.10/themes/default/default.css">
+    <script src="../../kindeditor-4.1.10/kindeditor-all.js"></script>
+
+    <style type="text/css">
+        a{text-decoration: none}
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="row clearfix">
+
+        <div class="col-md-12 column">
+            <button type="button" onclick="javascript:goToHome()" class="btn btn-default btn-warning">去首页</button>
+        </div>
+
+        <script>
+            function goToHome(){
+                location.href="../wl/zym";
+            }
+        </script>
+        <div class="col-md-3 column">
+            <div class="row clearfix" style="margin-top:30px;">
+
+                <div class="col-md-12 column" >
+                    <!--头像-->
+<!--                    <input type="hidden" id="loginimg" th:value="${session.user.userImg}">-->
+
+                    <img width="100px" height="100px" id="img123" style="margin-left: 76px"  src="" class="img-circle" />
+
+                    <script>
+                        $(function () {
+
+                           // initimg();
+                        })
+                        initimg = function(){
+                            /*活头像*/
+                            var a =$("#loginimg").val();
+                            document.images.img123.src=a;
+                        }
+                    </script>
+                </div>
+                <div class="col-md-12 column" style="text-align: center">
+                    <!--用户名-->
+<!--                    <input class="form-control" type="hidden" id="userid" th:value="${u.id}">-->
+<!--                    <h3> <span th:text="${u.userName}"></span> </h3>-->
+                </div>
+                <div class="col-md-12 column" >
+                    <!--用户等级-->
+                    <h5>
+                        用户等级：
+                        <span text="balabala">Lv3 </span>
+                    </h5>
+                </div>
+                <div class="col-md-12 column" >
+                    <!--今日在线-->
+                    <h5>
+                        今日在线：
+                        <span text="balabala">4 小时 40 分</span>
+                    </h5>
+                </div>
+
+            </div>
+            <div class="row clearfix" style="margin-top: 20px">
+                <div class="col-md-12 column">
+                    <!--进度条-->
+                    <div class="progress " >
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                            style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix" style="margin-top: 20px">
+                <div class="col-md-12 column">
+
+                    <!--树-->
+                    <div id="tree"> </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-9 column">
+
+            <!--展示各个页面-->
+            <div id="page-one" ></div>
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //     	1.定一个函数 用来获取树的数据
+    var queryTreeData = [{"id":1,"text":"个人中心","icon":"glyphicon glyphicon-user","href":"../zqx/tohomesy"},
+        {"id":2,"text":"帖子空间","icon":"glyphicon glyphicon-comment","href":"../zqx/homeplgl"},//glyphicon glyphicon-envelope
+        {"id":3,"text":"我的消息","icon":"glyphicon glyphicon-bell","href":"../zqx/homeimxx"},
+        {"id":6,"text":"安全中心","icon":"glyphicon glyphicon-lock","href":"../zqx/homeinfo"},
+        {"id":7,"text":"我的收藏","icon":"glyphicon glyphicon-heart","href":"../wl/shouchang"},
+        /*{"id":8,"text":"消息发布","icon":"glyphicon glyphicon-envelope","href":"../zqx/homeemail"},*/
+        ];
+    // 		2.构建treeview树
+    $(function(){
+//     		console.info(queryTreeData())
+        $("#tree").treeview({
+            data:queryTreeData,
+            onNodeSelected:function(event,node){
+
+//     				1.通过ajax获取展示内容
+                $.ajax({
+                    type:"post",
+                    url:node.href,
+                    data:{userID:$("#userid").val()},
+                    success:function(info){
+
+                        /*添加页面*/
+                        $("#page-one").html(info);
+                    }
+                })
+
+            }
+        })
+
+        /*默认展示个人中心*/
+        $.ajax({
+            type:"post",
+            url:"../zqx/tohomesy",
+            data:{userID:$("#userid").val()},
+            success:function(info){
+
+                $("#page-one").html(info);
+            }
+        })
+
+
+    })
+
+
+</script>
+</body>
+</html>

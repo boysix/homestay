@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap3/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap3/css/bootstrap.css"/>
+
+    <script src="../js/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-treeview/bootstrap-treeview.min.css"/>
+
+    <script src="../js/bootStrap-addTabs/bootstrap.addtabs.js"></script>
+    <link rel="stylesheet" href="../js/bootStrap-addTabs/bootstrap.addtabs.css"/>
+
+    <script src="../js/bootstrap-table/bootstrap-table.js"></script>
+    <script src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-table/bootstrap-table.css"/>
+
+    <!-- 引入弹框的js -->
+    <script src="../js/bootstrap-bootbox/bootbox.js"></script>
+    <!-- bootstrap-dialog  -->
+    <script src="../js/bootstrap-dialog/dist/js/bootstrap-dialog.js"></script>
+    <link href="../js/bootstrap-dialog/dist/css/bootstrap-dialog.css" rel="stylesheet"/>
+
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-6 column">
+            <div class="tabbable" id="tabs-803007">
+                <ul class="nav nav-tabs">
+
+                    <li class="active">
+                        <a href="#panel-525740" data-toggle="tab">普通邮件</a>
+                    </li>
+
+                    <li>
+                        <a href="#panel-499527" data-toggle="tab">全站广播</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-525740" style="margin-top: 30px">
+
+
+
+                        <form role="form" id="oneForm">
+                            <div class="form-group">
+
+                                <label for="exampleInputEmail1"> <b>收件人：</b>    Email</label>
+                                <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="请输入接收人邮箱号..."  />
+                            </div>
+
+                            <div class="form-group" id="chaSongForm" style="display: none">
+
+                                <label for="exampleInputEmail12"> <b>抄送人：</b>    Email</label>
+
+                                    <a href="javascript:delEmailA()" class="alert-link">删除抄送人</a>
+                                <input type="email" name="chaosong" class="form-control" id="exampleInputEmail12" placeholder="请输入抄送人邮箱号..."  />
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="zhuti">主题</label>
+                                </div>
+                                <div class="col-sm-10">
+                                    <a href="javascript:addEmailA()" class="alert-link">添加抄送人</a>
+                                </div>
+
+                                <input type="text" name="zhuti" class="form-control" id="zhuti" placeholder="请输入邮件主题..." />
+                            </div>
+                            <div class="form-group">
+
+                                <label for="content">正文</label>
+
+                                <!-- 文本域-->
+                                <textarea id="content" class="form-control" style="height: 266px" name="content" placeholder="请输入邮件内容..."></textarea>
+
+                                <p class="help-block">
+                                    Example block-level help text here.
+                                </p>
+
+                            </div>
+
+                            <button type="button" onclick="sendOneTwo()" class="btn btn-info btn-default btn-block">发送</button>
+                        </form>
+
+
+                    </div>
+                    <div class="tab-pane" id="panel-499527" style="margin-top: 30px">
+
+
+
+
+
+                        <form role="form" id="twoForm">
+
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4>
+                                    注意!
+                                </h4> <strong>警告!</strong> 此信件会发送<b>所有绑定邮箱</b>用户.
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="zhuti1">主题</label>
+
+                                <input type="text" class="form-control" id="zhuti1" placeholder="请输入邮件主题..." />
+                            </div>
+                            <div class="form-group">
+
+
+                                <label for="content1">正文</label>
+                                <textarea id="content1"  class="form-control" style="height: 266px" name="content" placeholder="请输入邮件内容..."></textarea>
+                                <p class="help-block">
+                                    Example block-level help text here.
+                                </p>
+
+                            </div>
+
+                            <button type="button" onclick="quanbu()" class="btn btn-info btn-default btn-block">发送</button>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 column">
+            <div class="tabbable" id="tabs-872355">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#panel-711185" data-toggle="tab">联系人</a>
+                    </li>
+                    <li>
+                        <a href="#panel-934127" data-toggle="tab">组织</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-711185">
+                        <p>
+                            请找组织！
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="panel-934127">
+                        <p>
+                            找我也没有^.^
+
+                            <a href="../zqx/sendEmail">测试定时发送热榜消息</a>
+
+<!--                            <a href="../zqx/homeinfo">测试定时发送热榜消息</a>-->
+
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+
+    /*全部发送*/
+    function quanbu() {
+
+        //var demo = $("#twoForm").serialize();
+
+
+
+
+        var twozhuti = $("#zhuti1").val();
+        var twocontent = $("#content1").val();
+
+
+
+        $.ajax({
+            url: "../zqx/emailOneTwo",
+            type: "post",
+            data:{zhuti:twozhuti,content:twocontent,status:'1'},
+            datatype:"json",
+            success: function (data) {
+                alert(data);
+
+
+            },
+            error: function () {
+                alert("ajax访问失败了,查看控制台");
+            }
+        });
+
+    }
+
+    /*普通发送*/
+    function sendOneTwo() {
+       // var demo = $("#oneForm").serialize();
+
+        var oneEmail = $("#exampleInputEmail1").val();
+        var onechao = $("#exampleInputEmail12").val();
+        var onezhuti = $("#zhuti").val();
+        var onecontent = $("#content").val();
+        /*不带抄送*/
+        var status = '3';
+        if (onechao!=null && ""!=onechao){
+            /*带抄送*/
+            status = '6';
+        }
+
+
+        /*alert(oneEmail+"----status:"+status+"----"+onecontent+"----"+onechao);
+        return*/
+
+        $.ajax({
+            url: "../zqx/emailOneTwo",
+            type: "post",
+            data:{email:oneEmail,zhuti:onezhuti,content:onecontent,chaosong:onechao,status:status},
+            datatype:"json",
+            success: function (data) {
+
+                alert(data);
+
+            },
+            error: function () {
+                alert("ajax访问失败了,查看控制台");
+            }
+        });
+
+    }
+
+
+    /*添加抄送*/
+    function addEmailA() {
+
+        $("#chaSongForm").prop("style","")
+
+    }
+
+    /*删除抄送*/
+    function delEmailA() {
+        var onechao = $("#exampleInputEmail12").val();
+        $("#exampleInputEmail12").prop("value","")
+        $("#chaSongForm").prop("style","display: none")
+
+    }
+
+</script>
+</body>
+</html>
